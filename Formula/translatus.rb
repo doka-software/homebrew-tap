@@ -6,7 +6,7 @@
 # checksum matrix to keep in step with every release.
 class Translatus < Formula
   desc "Translate and annotate whole books with your own LLM, locally"
-  homepage "https://github.com/doka-software/translatus"
+  homepage "https://doka.software/translatus"
   url "https://github.com/doka-software/translatus/archive/refs/tags/v1.0.0.tar.gz"
   # Filled by `packaging/homebrew/update-formula.sh` from the published tarball.
   sha256 "c707fa7f2808dff7e7c56cfd6aed54c6790e011c29fc58f3de2e7254ab7b122b"
