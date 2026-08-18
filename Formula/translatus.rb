@@ -1,5 +1,9 @@
 # Homebrew formula for the Translatus CLI.
 #
+# NOT YET PUBLISHED. This file is the finished article, held in the private
+# container repo until two gates clear (see packaging/homebrew/README.md):
+# the carrier repo going public, and the maintainer identity swap.
+#
 # Builds from source rather than shipping a prebuilt bottle. Homebrew supplies
 # and caches the Rust toolchain, the build takes well under a minute, and it
 # keeps the formula to a single platform-agnostic block — no per-target URL and
@@ -7,9 +11,9 @@
 class Translatus < Formula
   desc "Translate and annotate whole books with your own LLM, locally"
   homepage "https://doka.software/translatus"
-  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.0.0.tar.gz"
+  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.1.0.tar.gz"
   # Filled by `packaging/homebrew/update-formula.sh` from the published tarball.
-  sha256 "c707fa7f2808dff7e7c56cfd6aed54c6790e011c29fc58f3de2e7254ab7b122b"
+  sha256 "221777e33baad5b980b9e44cc5e7f5787b4f0d56c5946e59bf81b2c5e4b8bb21"
   license "MIT"
   head "https://github.com/doka-software/translatus.git", branch: "main"
 
@@ -17,6 +21,21 @@ class Translatus < Formula
 
   def install
     system "cargo", "install", *std_cargo_args(path: "apps/cli")
+  end
+
+  # Deliberately a caveat and not a post_install hook: registering the MCP
+  # server writes into Claude Code's and Codex's configuration, and `brew
+  # install` is non-interactive, so a hook could only do that without asking.
+  # The command below is one line, and the interactive session offers to run it
+  # for you the first time you open it.
+  def caveats
+    <<~EOS
+      To use Translatus from an AI agent (Claude Code, Codex):
+        translatus mcp install
+
+      It registers through each agent's own CLI and can be undone with
+      `translatus mcp uninstall`.
+    EOS
   end
 
   test do
