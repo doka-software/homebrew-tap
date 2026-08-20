@@ -11,16 +11,30 @@
 class Translatus < Formula
   desc "Translate and annotate whole books with your own LLM, locally"
   homepage "https://doka.software/translatus"
-  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.1.9.tar.gz"
+  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.2.0.tar.gz"
   # Filled by `packaging/homebrew/update-formula.sh` from the published tarball.
-  sha256 "5322084a54833ef9457b1d5f71a85db654988d8a758734d30767ae43c471a27b"
+  sha256 "55329c60201b6a9e5c83a5f4967f737bc4e748ad1364b523bc430d55d3d9d265"
   license "MIT"
   head "https://github.com/doka-software/translatus.git", branch: "main"
 
   depends_on "rust" => :build
+  # The subscription sidecar is a Node service the CLI starts on demand; the
+  # binary alone cannot reach a Codex/Claude plan without it. Shipping only the
+  # binary left the documented first install path unable to use the documented
+  # first model source.
+  depends_on "node"
 
   def install
     system "cargo", "install", *std_cargo_args(path: "apps/cli")
+
+    # The CLI looks for the kit next to the binary and then under libexec, so
+    # this is the layout `--provider subscription` resolves without any
+    # configuration. Dependencies are installed here rather than on first run
+    # so the first translation does not stall on npm.
+    libexec.install "apps/subscription-kit" => "subscription-kit"
+    cd libexec/"subscription-kit" do
+      system "npm", "install", "--omit=dev", "--no-audit", "--no-fund"
+    end
   end
 
   # Deliberately a caveat and not a post_install hook: registering the MCP
