@@ -11,9 +11,9 @@
 class Translatus < Formula
   desc "Translate and annotate whole books with your own LLM, locally"
   homepage "https://doka.software/translatus"
-  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.2.0.tar.gz"
+  url "https://github.com/doka-software/translatus/archive/refs/tags/v1.2.1.tar.gz"
   # Filled by `packaging/homebrew/update-formula.sh` from the published tarball.
-  sha256 "55329c60201b6a9e5c83a5f4967f737bc4e748ad1364b523bc430d55d3d9d265"
+  sha256 "dcaffb235066f2edc4b13614c540a4cc00d8f643b6bc79386b9af004e766322c"
   license "MIT"
   head "https://github.com/doka-software/translatus.git", branch: "main"
 
