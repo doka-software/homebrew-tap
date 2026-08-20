@@ -33,7 +33,13 @@ class Translatus < Formula
     # so the first translation does not stall on npm.
     libexec.install "apps/subscription-kit" => "subscription-kit"
     cd libexec/"subscription-kit" do
-      system "npm", "install", "--omit=dev", "--no-audit", "--no-fund"
+      # `prefix: false` is the in-place form: the kit is a vendored service run
+      # from this directory, not a package to install globally, so its
+      # `node_modules` belongs beside its `src`. The std args also pin the npm
+      # cache and skip lifecycle scripts, which this dependency tree does not
+      # use. `brew style` rejects a bare `npm install`.
+      system "npm", "install", "--omit=dev", "--no-audit", "--no-fund",
+             *std_npm_args(prefix: false)
     end
   end
 
